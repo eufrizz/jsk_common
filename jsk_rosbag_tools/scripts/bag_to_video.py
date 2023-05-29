@@ -25,6 +25,10 @@ def main():
     parser.add_argument('--no-progress-bar', action='store_true',
                         help="Don't show progress bar.")
     parser.add_argument('input_bagfile')
+    parser.add_argument('--start-time', type=int, help='start time in seconds from beginning of bag. Default start of bag.',
+                        default='-1')
+    parser.add_argument('--end-time', type=int, help='end time in seconds from beginning of bag. Default end of bag.',
+                        default='-1')
     args = parser.parse_args()
 
     if len(args.out) == 0:
@@ -44,6 +48,10 @@ def main():
         output_dirpath = args.out
     else:
         output_dirpath = args.out
+    if args.start_time == -1:
+        args.start_time = None
+    if args.end_time == -1:
+        args.end_time = None
     bag_to_video(input_bagfile,
                  output_filepath=output_filepath,
                  output_dirpath=output_dirpath,
@@ -53,7 +61,9 @@ def main():
                  samplerate=args.samplerate,
                  channels=args.channels,
                  audio_topic=args.audio_topic,
-                 show_progress_bar=not args.no_progress_bar)
+                 show_progress_bar=not args.no_progress_bar,
+                 start_time=args.start_time,
+                 end_time=args.end_time)
 
 
 if __name__ == '__main__':

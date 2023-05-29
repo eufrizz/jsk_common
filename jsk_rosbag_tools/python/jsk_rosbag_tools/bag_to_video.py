@@ -29,7 +29,9 @@ def bag_to_video(input_bagfile,
                  samplerate=16000,
                  channels=1,
                  audio_topic='/audio',
-                 show_progress_bar=True):
+                 show_progress_bar=True,
+                 start_time=None,
+                 end_time=None):
     """Create video from rosbag file.
 
     Specify only either output_filepath or output_dirpath.
@@ -101,7 +103,7 @@ def bag_to_video(input_bagfile,
         else:
             tmp_videopath = output_filepath
 
-        images = extract_image_topic(input_bagfile, image_topic)
+        images = extract_image_topic(input_bagfile, image_topic, start_time, end_time)
         topic_info_dict = get_topic_dict(input_bagfile)[image_topic]
         n_frame = topic_info_dict['messages']
 
