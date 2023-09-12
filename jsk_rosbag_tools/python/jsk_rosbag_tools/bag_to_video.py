@@ -31,7 +31,8 @@ def bag_to_video(input_bagfile,
                  audio_topic='/audio',
                  show_progress_bar=True,
                  start_time=None,
-                 end_time=None):
+                 end_time=None,
+                 encoder="libx264"):
     """Create video from rosbag file.
 
     Specify only either output_filepath or output_dirpath.
@@ -109,6 +110,17 @@ def bag_to_video(input_bagfile,
 
         if show_progress_bar:
             progress = tqdm(total=n_frame)
+        
+        bitrate = None
+        # The default bitrate with the original libx264 was 11546 kbps.
+        # The default bitrate when using nvenc was around 2117 kbps, resulting in inferior quality.
+        # Here we set the bitrate manually for nvenc so that the output looks the same quality but has the speed benefits of hardware encoding.
+        if encoder == "hevc_nvenc":
+            bitrate = "11546000"
+        elif encoder == "h264_nvenc":
+            bitrate = "11546000"
+        elif encoder == "libx265":
+            bitrate = "11546000"
 
         # remove 0 time stamp
         stamp = 0.0
@@ -130,10 +142,12 @@ def bag_to_video(input_bagfile,
             tmp_videopath,
             (width, height),
             fps, logfile=None,
+            codec=encoder,
+            bitrate=bitrate,
             ffmpeg_params=[
                 '-metadata',
                 'creation_time={}'.format(
-                    creation_time.strftime(time_format)),
+                    creation_time.strftime(time_format))
             ])
 
         current_time = 0.0

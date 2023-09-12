@@ -29,6 +29,8 @@ def main():
                         default='-1')
     parser.add_argument('--end-time', type=int, help='end time in seconds from beginning of bag. Default end of bag.',
                         default='-1')
+    parser.add_argument('--encoder', type=str, help='Video encoder to use with ffmpeg. Default h264_nvenc (GPU). Other options include libx264 (previous default), libx265, hevc_nvenc',
+                        default="h264_nvenc")
     args = parser.parse_args()
 
     if len(args.out) == 0:
@@ -63,7 +65,8 @@ def main():
                  audio_topic=args.audio_topic,
                  show_progress_bar=not args.no_progress_bar,
                  start_time=args.start_time,
-                 end_time=args.end_time)
+                 end_time=args.end_time,
+                 encoder=args.encoder)
 
 
 if __name__ == '__main__':
