@@ -63,6 +63,8 @@ def extract_image_topic(bag_filepath, topic_name, start_time=None, end_time=None
                 if msg.header.stamp > rospy.Duration(end_time) + start_stamp:
                     break
             topic_type = topic_dict[topic]['type']
+            if len(msg.data) == 0:
+                continue
             if topic_type == 'sensor_msgs/Image':
                 bgr_img = msg_to_img(msg)
                 encoding = msg.encoding
