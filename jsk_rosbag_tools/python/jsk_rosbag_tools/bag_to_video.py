@@ -111,16 +111,10 @@ def bag_to_video(input_bagfile,
         if show_progress_bar:
             progress = tqdm(total=n_frame)
         
-        bitrate = None
         # The default bitrate with the original libx264 was 11546 kbps.
         # The default bitrate when using nvenc was around 2117 kbps, resulting in inferior quality.
-        # Here we set the bitrate manually for nvenc so that the output looks the same quality but has the speed benefits of hardware encoding.
-        if encoder == "hevc_nvenc":
-            bitrate = "11546000"
-        elif encoder == "h264_nvenc":
-            bitrate = "11546000"
-        elif encoder == "libx265":
-            bitrate = "11546000"
+        # Here we set the bitrate manually for all encoders so that the output looks the same quality.
+        bitrate = "11546000"
 
         # remove 0 time stamp
         stamp = 0.0
